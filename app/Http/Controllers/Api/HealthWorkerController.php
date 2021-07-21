@@ -63,10 +63,7 @@ class HealthWorkerController extends Controller
     public function show($id)
     {
         $healthworker = HealthWorker::firstOrFail($id);
-        if (Auth::user()->isHealthWorker()) {
-            return new HealthWorkerResource($healthworker);
-        }
-        return  response()->json(["message" => "Forbidden"], 403);
+        return new HealthWorkerResource($healthworker);
     }
 
     /**
