@@ -53,6 +53,9 @@ class HealthWorkerController extends Controller
             'cadre'         => $request->cadre,
             'department'    => $request->department,
         ]);
+
+        // Upload Patient Image and attach relationship in the database
+        $healthworker->attachImage($request->image);
         return new HealthWorkerResource($healthworker);
     }
 
