@@ -2,8 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Models\Patient;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\PatientRequest;
+use App\Http\Resources\PatientResource;
 
 class PatientController extends Controller
 {
@@ -23,9 +29,28 @@ class PatientController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PatientRequest $request)
     {
-        //
+        // Register A Health Worker
+        // Create health worker in Users table to enable login access
+        $user = User::create([
+            'name'          => $request->name,
+            'email'         => $request->email,
+            'password'      => Hash::make($request->password),
+            'email_verified_at' => now(),
+            'remember_token'=> Str::random(10),
+        ]);
+
+        // Add User as Patient
+        $patient = Patient::create([
+            'name'          => $request->name,
+            'surname'       => $request->surname,
+            'age'           => $request->age,
+            'gender'        => $request->gender,
+            'cadre'         => $request->cadre,
+            'department'    => $request->department,
+        ]);
+        return new PatientResource($patient);
     }
 
     /**
