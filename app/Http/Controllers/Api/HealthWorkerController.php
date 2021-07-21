@@ -73,9 +73,25 @@ class HealthWorkerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(HealthWorkerRequest $request, HealthWorker $id)
     {
-        //
+        if (!$request->filled('password')) {
+            $request->validate([
+                'name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'string', 'email', 'max:255'],
+            ]);
+            $user->update([
+                'name'              => $request->name,
+                'email'             => $request->email,
+            ]);
+            return;
+        } else {
+            // Update Details with Password
+            $user->update([
+                'password'          => Hash::make($request->password),
+            ]);
+            return back()->with('message', 'Your Password has been Updated Successfully...');
+        }
     }
 
     /**
@@ -86,6 +102,7 @@ class HealthWorkerController extends Controller
      */
     public function destroy($id)
     {
-        //
+        User::findOrFail($id)->delete();
+        return response()->json(['message' => 'Health Worker Record deleted'], 200);
     }
 }
