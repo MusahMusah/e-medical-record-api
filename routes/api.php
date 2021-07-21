@@ -17,5 +17,10 @@ use App\Http\Controllers\Api\TokenController;
 */
 Route::post('/sanctum/token', TokenController::class);
 Route::middleware(['auth:sanctum'])->group(function () {
+    // Endpoints for Healworkers Access
+    Route::group(['middleware' => ['healthworker']], function(){
+
+    });
+    // General Endpoints
     Route::get('/users/me', MeController::class);
 });

@@ -40,5 +40,12 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'is_health_worker' => 'boolean',
     ];
+
+    // Helper to check if user is a health Worker
+    public function isHealthWorker(): bool
+    {
+        return $this->is_health_worker;
+    }
 }
