@@ -54,8 +54,10 @@ class PatientController extends Controller
             'ward'          => $request->ward,
             'lga'           => $request->lga,
             'state'         => $request->state,
-            'image'         => $request->image,
         ]);
+
+        // Upload Patient Image and attach relationship in the database
+        $patient->attachImage($request->image);
         return new PatientResource($patient);
     }
 
@@ -92,8 +94,8 @@ class PatientController extends Controller
             'ward'           => $request->ward,
             'lga'           => $request->lga,
             'state'           => $request->state,
-            ''           => $request->,
         ]);
+        $request->image ?  : ;
         return new PatientResource($patient);
     }
 
