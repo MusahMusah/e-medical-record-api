@@ -47,8 +47,13 @@ class PatientController extends Controller
             'surname'       => $request->surname,
             'age'           => $request->age,
             'gender'        => $request->gender,
-            'cadre'         => $request->cadre,
-            'department'    => $request->department,
+            'height'        => $request->height,
+            'weight'        => $request->weight,
+            'bmi'           => $request->weight / $request->height,
+            'ward'          => $request->ward,
+            'lga'           => $request->lga,
+            'state'         => $request->state,
+            'image'         => $request->image,
         ]);
         return new PatientResource($patient);
     }
