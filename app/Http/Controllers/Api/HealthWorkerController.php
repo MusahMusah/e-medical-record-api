@@ -35,15 +35,17 @@ class HealthWorkerController extends Controller
         // Register A Health Worker
         // Create health worker in Users table to enable login access
         $user = User::create([
-            'name'          => $request->name,
-            'email'         => $request->email,
-            'password'      => Hash::make($request->password),
+            'name'              => $request->name,
+            'email'             => $request->email,
+            'is_health_worker'  => true,
+            'password'          => Hash::make($request->password),
             'email_verified_at' => now(),
-            'remember_token'=> Str::random(10),
+            'remember_token'    => Str::random(10),
         ]);
 
         // Add User as HealthWorker
         $healthworker = HealthWorker::create([
+            'user_id'       => $user->id,
             'name'          => $request->name,
             'surname'       => $request->surname,
             'age'           => $request->age,
@@ -75,23 +77,16 @@ class HealthWorkerController extends Controller
      */
     public function update(HealthWorkerRequest $request, HealthWorker $id)
     {
-        if (!$request->filled('password')) {
-            $request->validate([
-                'name' => ['required', 'string', 'max:255'],
-                'email' => ['required', 'string', 'email', 'max:255'],
-            ]);
-            $user->update([
-                'name'              => $request->name,
-                'email'             => $request->email,
-            ]);
-            return;
-        } else {
-            // Update Details with Password
-            $user->update([
-                'password'          => Hash::make($request->password),
-            ]);
-            return back()->with('message', 'Your Password has been Updated Successfully...');
-        }
+        $healthworker = $id;
+        $healthworker->update([
+            'name'            => $request->name,
+            'surname'         => $request->surname,
+            'age'             => $request->age,
+            'gender'          => $request->gender,
+            'cadre'           => $request->cadre,
+            'department'      => $request->department,
+        ]);
+        return new HealthWorkerResource($healthworker);
     }
 
     /**
