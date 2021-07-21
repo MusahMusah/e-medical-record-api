@@ -12,5 +12,6 @@ class HealthWorker extends Model
     public const VALIDATION_RULES = [
         'name'          => ['required', 'string', 'max:255'],
         'email'         => ['required', 'unique:users'],
+        'password' => 'sometimes|nullable|string|min:8',
     ];
 }

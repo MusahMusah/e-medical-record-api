@@ -35,15 +35,17 @@ class HealthWorkerController extends Controller
         // Register A Health Worker
         // Create health worker in Users table to enable login access
         $user = User::create([
-            'name'          => $request->name,
-            'email'         => $request->email,
-            'password'      => Hash::make($request->password),
+            'name'              => $request->name,
+            'email'             => $request->email,
+            'is_health_worker'  => true,
+            'password'          => Hash::make($request->password),
             'email_verified_at' => now(),
-            'remember_token'=> Str::random(10),
+            'remember_token'    => Str::random(10),
         ]);
 
         // Add User as HealthWorker
         $healthworker = HealthWorker::create([
+            'user_id'       => $user->id,
             'name'          => $request->name,
             'surname'       => $request->surname,
             'age'           => $request->age,
@@ -73,9 +75,17 @@ class HealthWorkerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(HealthWorkerRequest $request, HealthWorker $healthworker)
     {
-        //
+        $healthworker->update([
+            'name'            => $request->name,
+            'surname'         => $request->surname,
+            'age'             => $request->age,
+            'gender'          => $request->gender,
+            'cadre'           => $request->cadre,
+            'department'      => $request->department,
+        ]);
+        return new HealthWorkerResource($healthworker);
     }
 
     /**
@@ -86,6 +96,7 @@ class HealthWorkerController extends Controller
      */
     public function destroy($id)
     {
-        //
+        User::findOrFail($id)->delete();
+        return response()->json(['message' => 'Health Worker Record deleted'], 200);
     }
 }

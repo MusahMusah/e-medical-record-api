@@ -26,6 +26,7 @@ class PatientRequest extends FormRequest
     {
         $rules = Patient::VALIDATION_RULES;
         if ($this->getMethod() == 'POST') {
+            $rules += ['image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'];
             $rules += ['password' => 'required'];
         } else {
             $rules['email'][1] = 'unique:users,email,' . request()->route('user')->id;
