@@ -43,6 +43,7 @@ class PatientController extends Controller
 
         // Add User as Patient
         $patient = Patient::create([
+            'user_id'       => $user->id,
             'name'          => $request->name,
             'surname'       => $request->surname,
             'age'           => $request->age,
@@ -66,7 +67,9 @@ class PatientController extends Controller
      */
     public function show($id)
     {
-        //
+        // find a patient and return all the patients information
+        $patient = Patient::firstOrFail($id);
+        return new PatientResource($patient);
     }
 
     /**
@@ -76,9 +79,22 @@ class PatientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PatientRequest $request, Patient $patient)
     {
-        //
+        $patient->update([
+            'name'            => $request->name,
+            'surname'         => $request->surname,
+            'age'             => $request->age,
+            'gender'          => $request->gender,
+            'height'           => $request->height,
+            'weight'           => $request->weight,
+            'bmi'           => $request->bmi,
+            'ward'           => $request->ward,
+            'lga'           => $request->lga,
+            'state'           => $request->state,
+            ''           => $request->,
+        ]);
+        return new PatientResource($patient);
     }
 
     /**
@@ -89,6 +105,8 @@ class PatientController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // Find and delete patient record
+        User::findOrFail($id)->delete();
+        return response()->json(['message' => 'Patient Record deleted'], 200);
     }
 }

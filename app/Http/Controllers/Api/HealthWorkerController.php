@@ -75,9 +75,8 @@ class HealthWorkerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(HealthWorkerRequest $request, HealthWorker $id)
+    public function update(HealthWorkerRequest $request, HealthWorker $healthworker)
     {
-        $healthworker = $id;
         $healthworker->update([
             'name'            => $request->name,
             'surname'         => $request->surname,
