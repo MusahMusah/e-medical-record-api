@@ -88,6 +88,8 @@ class HealthWorkerController extends Controller
             'cadre'           => $request->cadre,
             'department'      => $request->department,
         ]);
+        // check for image in request
+        if ($request->fill('image')) $healthworker->attachImage($request->image);
         return new HealthWorkerResource($healthworker);
     }
 

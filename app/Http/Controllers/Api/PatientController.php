@@ -95,7 +95,8 @@ class PatientController extends Controller
             'lga'           => $request->lga,
             'state'           => $request->state,
         ]);
-        $request->image ?  : ;
+        // check for image in request
+        if ($request->fill('image')) $patient->attachImage($request->image);
         return new PatientResource($patient);
     }
 

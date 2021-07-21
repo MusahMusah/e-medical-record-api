@@ -17,6 +17,14 @@ class HealthWorker extends Model implements HasMedia
         'password' => 'sometimes|nullable|string|min:8',
     ];
 
+    // Register all image uploads as a collection
+    public function registerMediaCollections(): void
+    {
+        $this
+            ->addMediaCollection('healthworker_images')
+            ->singleFile();
+    }
+
     // Handle Image Upload and model relationship
     public function attachImage($file)
     {

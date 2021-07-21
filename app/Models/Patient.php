@@ -16,6 +16,14 @@ class Patient extends Model implements HasMedia
         'email'         => ['required', 'unique:users'],
     ];
 
+    // Register all image uploads as a collection
+    public function registerMediaCollections(): void
+    {
+        $this
+            ->addMediaCollection('patients_images')
+            ->singleFile();
+    }
+
     // Handle Image Upload and model relationship
     public function attachImage($file)
     {
