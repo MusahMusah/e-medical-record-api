@@ -26,4 +26,17 @@ class Message extends Model
     public function sender () {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    // HELPER METHODS
+    // Create Message Accessors
+    public function getBodyAttribute($value)
+    {
+        if($this->trashed()){
+            if(!auth()->check()) return null;
+            return auth()->id() == $this->sender->id ?
+                    'You deleted this message' :
+                    "{$this->sender->name} deleted this message";
+        }
+        return $value;
+    }
 }
