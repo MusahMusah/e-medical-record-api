@@ -21,7 +21,8 @@ class HealthWorkerController extends Controller
      */
     public function index()
     {
-        //
+        $healthworkers = HealthWorker::orderByDesc('created_at')->paginate(10);
+        return HealthWorkerResource::collection($healthworkers);
     }
 
     /**
@@ -53,6 +54,9 @@ class HealthWorkerController extends Controller
             'cadre'         => $request->cadre,
             'department'    => $request->department,
         ]);
+
+        // Upload Patient Image and attach relationship in the database
+        $healthworker->attachImage($request->image);
         return new HealthWorkerResource($healthworker);
     }
 
@@ -85,6 +89,8 @@ class HealthWorkerController extends Controller
             'cadre'           => $request->cadre,
             'department'      => $request->department,
         ]);
+        // check for image in request
+        if ($request->fill('image')) $healthworker->attachImage($request->image);
         return new HealthWorkerResource($healthworker);
     }
 
@@ -94,9 +100,9 @@ class HealthWorkerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(HealthWorker $healthworker)
     {
-        User::findOrFail($id)->delete();
+        $healthworker->delete();
         return response()->json(['message' => 'Health Worker Record deleted'], 200);
     }
 }
