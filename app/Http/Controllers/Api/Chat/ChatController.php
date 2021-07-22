@@ -51,9 +51,8 @@ class ChatController extends Controller
     // get messages for chat
     public function getChatMessages($id)
     {
-        $messages = $this->messages->withCriteria([
-                        new WithTrashed()
-                    ])->findWhere('chat_id', $id);
+        $messages = Message::where('chat_id', $id)
+                            ->get()->withTrashed();
 
         return MessageResource::collection($messages);
     }
@@ -61,7 +60,7 @@ class ChatController extends Controller
     // mark chat as read
     public function markAsRead($id)
     {
-        $chat = $this->chats->find($id);
+        $chat = Chat::findOrFail($id);
         $chat->markAsReadForUser(auth()->id());
         return response()->json(['message' => 'successful'], 200);
     }
@@ -69,8 +68,9 @@ class ChatController extends Controller
     // destroy message
     public function destroyMessage($id)
     {
-        $message = $this->messages->find($id);
+        $message = Message::findOrFail($id);
         $this->authorize('delete', $message);
         $message->delete();
+        return response()->json(['message' => 'successful'], 200);
     }
 }
