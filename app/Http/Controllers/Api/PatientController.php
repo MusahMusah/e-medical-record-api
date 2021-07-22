@@ -106,10 +106,10 @@ class PatientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Patient $patient)
     {
         // Find and delete patient record
-        User::findOrFail($id)->delete();
+        $patient->delete();
         return response()->json(['message' => 'Patient Record deleted'], 200);
     }
 }

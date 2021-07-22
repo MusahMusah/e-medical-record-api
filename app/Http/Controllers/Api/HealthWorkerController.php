@@ -21,7 +21,8 @@ class HealthWorkerController extends Controller
      */
     public function index()
     {
-        //
+        $healthworkers = HealthWorker::orderByDesc('created_at')->paginate(10);
+        return HealthWorkerResource::collection($healthworkers);
     }
 
     /**
@@ -99,9 +100,9 @@ class HealthWorkerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(HealthWorker $healthworker)
     {
-        User::findOrFail($id)->delete();
+        $healthworker->delete();
         return response()->json(['message' => 'Health Worker Record deleted'], 200);
     }
 }
