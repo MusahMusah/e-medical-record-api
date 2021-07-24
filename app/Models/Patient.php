@@ -29,4 +29,10 @@ class Patient extends Model implements HasMedia
     {
         return $this->addMediaFromRequest($file)->toMediaCollection('patients_images');
     }
+
+    // Model Search
+    public function search(Request $request)
+    {
+        
+    }
 }

@@ -24,6 +24,17 @@ class PatientController extends Controller
     }
 
     /**
+     * Search Patiets using different filters
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function search(Request $request)
+    {
+        $patients = Patient::search($request);
+        return  PatientResource::collection($patients);
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
