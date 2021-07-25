@@ -26,7 +26,7 @@ class CreatePatientsTable extends Migration
             $table->string('ward');
             $table->string('lga');
             $table->string('state');
-            $table->string('image');
+            $table->text('image');
             $table->timestamps();
         });
     }

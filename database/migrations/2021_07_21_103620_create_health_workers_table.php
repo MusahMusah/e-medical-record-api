@@ -21,6 +21,7 @@ class CreateHealthWorkersTable extends Migration
             $table->string('age');
             $table->string('gender');
             $table->string('cadre');
+            $table->text('image');
             $table->string('department');
             $table->timestamps();
         });

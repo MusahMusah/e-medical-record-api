@@ -21,7 +21,7 @@ class HealthWorkerController extends Controller
      */
     public function index()
     {
-        $healthworkers = HealthWorker::orderByDesc('created_at')->paginate(10);
+        $healthworkers = HealthWorker::orderByDesc('created_at')->get();
         return HealthWorkerResource::collection($healthworkers);
     }
 
@@ -31,7 +31,7 @@ class HealthWorkerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(HealthWorkerRequest $request)
+    public function store(Request $request)
     {
         // Register A Health Worker
         // Create health worker in Users table to enable login access
@@ -44,6 +44,21 @@ class HealthWorkerController extends Controller
             'remember_token'    => Str::random(10),
         ]);
 
+        // Handle File Upload
+        if ($request->hasFile('image')) {
+            // Get filename with the extension
+            $filenameWithExt = $request->file('image')->getClientOriginalName();
+            // Get just filename
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            // Get just ext
+            $extension = $request->file('image')->getClientOriginalExtension();
+            // Filename to store
+            $fileNameToStore = $filename . '_' . time() . '.' . $extension;
+            // Upload Image
+            $path = $request->file('image')->storeAs('public/healthworkers', $fileNameToStore);
+            $path = str_replace('public', '', $path);
+        }
+
         // Add User as HealthWorker
         $healthworker = HealthWorker::create([
             'user_id'       => $user->id,
@@ -53,10 +68,8 @@ class HealthWorkerController extends Controller
             'gender'        => $request->gender,
             'cadre'         => $request->cadre,
             'department'    => $request->department,
+            'image'         => asset('storage/'.$path),
         ]);
-
-        // Upload Patient Image and attach relationship in the database
-        $healthworker->attachImage($request->image);
         return new HealthWorkerResource($healthworker);
     }
 

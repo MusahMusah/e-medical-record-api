@@ -10,6 +10,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class HealthWorker extends Model implements HasMedia
 {
     use HasFactory, InteractsWithMedia;
+    // Fillable field for mass assignment
+    protected $fillable = [
+        'name',
+        'surname',
+        'user_id',
+        'age',
+        'gender',
+        'cadre',
+        'department',
+        'image',
+    ];
     // General Validation Rules for all Requests type
     public const VALIDATION_RULES = [
         'name'          => ['required', 'string', 'max:255'],
