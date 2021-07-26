@@ -30,7 +30,7 @@ class PatientEncounterController extends Controller
      */
     public function store(PatientEncounterRequest $request, PatientEncounter $encounter)
     {
-        $encounter->create($request->validated());
+        $encounter->create($request->all());
         return new PatientEncounterResource($encounter);
     }
 

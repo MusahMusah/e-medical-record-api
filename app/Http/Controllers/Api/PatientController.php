@@ -88,7 +88,7 @@ class PatientController extends Controller
     public function show($id)
     {
         // find a patient and return all the patients information
-        $patient = Patient::firstOrFail($id);
+        $patient = Patient::findOrFail($id);
         return new PatientResource($patient);
     }
 

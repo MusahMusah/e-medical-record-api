@@ -17,18 +17,18 @@ class CreatePatientEncounterTable extends Migration
             $table->id();
             $table->string('date');
             $table->string('time');
+            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->enum('visit_type', ['first_time','repeat'])->default('first_time');
             $table->foreignId('healthworker')->nullable()->constrained('users')->onDelete('cascade');
-            $table->foreignId('shared_access')->nullable()->constrained('users')->nullOnDelete();
             $table->string('height');
             $table->string('weight');
             $table->string('bmi');
             $table->string('bp');
             $table->string('temp');
             $table->string('respiratory_rate');
-            $table->string('complaints');
+            $table->text('complaints');
             $table->string('diagnosis');
-            $table->string('treatment_plan');
+            $table->text('treatment_plan');
             $table->timestamps();
         });
     }

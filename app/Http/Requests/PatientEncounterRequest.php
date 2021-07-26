@@ -14,7 +14,7 @@ class PatientEncounterRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -25,12 +25,6 @@ class PatientEncounterRequest extends FormRequest
     public function rules()
     {
         $rules = PatientEncounter::VALIDATION_RULES;
-        // if ($this->getMethod() == 'POST') {
-        //     $rules += ['image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'];
-        //     $rules += ['password' => 'required'];
-        // } else {
-        //     $rules['email'][1] = 'unique:users,email,' . request()->route('user')->id;
-        // }
         return $rules;
     }
 }

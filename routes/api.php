@@ -7,7 +7,8 @@ use App\Http\Controllers\Api\TokenController;
 use App\Http\Controllers\Api\Chat\ChatController;
 use App\Http\Controllers\Api\HealthWorkerController;
 use App\Http\Controllers\Api\PatientController;
-use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
+use App\Http\Controllers\Api\PatientEncounterController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -27,6 +28,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     // Endpoints for patients
     Route::apiResource('patient', PatientController::class);
+    Route::apiResource('patient/encounter', PatientEncounterController::class);
     Route::post('allPatients', [PatientController::class, 'allPatients']);
 
     // GENERAL ENDPOINTS

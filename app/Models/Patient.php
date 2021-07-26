@@ -68,6 +68,11 @@ class Patient extends Model implements HasMedia
                 $query->orWhere('age', '>', '51');
             }
         }
-        $byGender ? $query->orWhereBetween('gender', $byGender) : $query;
+        if (count($byGender) > 1) :
+            $query->orWhereBetween('gender', $byGender);
+        elseif(count($byGender) === 1) :
+            $query->orWhere('gender', $byGender);
+        endif;
+        // count($byGender) > 1 ? $query->orWhereBetween('gender', $byGender) : $query;
     }
 }
