@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\MeController;
 use App\Http\Controllers\Api\TokenController;
 use App\Http\Controllers\Api\Chat\ChatController;
 use App\Http\Controllers\Api\HealthWorkerController;
+use App\Http\Controllers\Api\PatientController;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 /*
 |--------------------------------------------------------------------------
@@ -19,15 +20,14 @@ use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 */
 Route::post('/sanctum/token', TokenController::class);
 Route::middleware(['auth:sanctum'])->group(function () {
-
-    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
-    ->name('logout');
-
     // Endpoints for Healworkers Access
-    // Route::apiResource('healthworker', HealthWorkerController::class);
     Route::group(['middleware' => ['healthworker']], function () {
         Route::apiResource('healthworker', HealthWorkerController::class);
     });
+
+    // Endpoints for patients
+    Route::apiResource('patient', PatientController::class);
+    Route::post('allPatients', [PatientController::class, 'allPatients']);
 
     // GENERAL ENDPOINTS
     Route::get('/users/me', MeController::class);

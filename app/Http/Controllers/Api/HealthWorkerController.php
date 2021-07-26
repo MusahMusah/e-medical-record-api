@@ -31,7 +31,7 @@ class HealthWorkerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(HealthWorkerRequest $request)
     {
         // Register A Health Worker
         // Create health worker in Users table to enable login access
@@ -57,6 +57,8 @@ class HealthWorkerController extends Controller
             // Upload Image
             $path = $request->file('image')->storeAs('public/healthworkers', $fileNameToStore);
             $path = str_replace('public', '', $path);
+        } else {
+            $path = 'healthworker/noimage.png';
         }
 
         // Add User as HealthWorker
@@ -68,7 +70,7 @@ class HealthWorkerController extends Controller
             'gender'        => $request->gender,
             'cadre'         => $request->cadre,
             'department'    => $request->department,
-            'image'         => asset('storage/'.$path),
+            'image'         => asset('storage'.$path),
         ]);
         return new HealthWorkerResource($healthworker);
     }
@@ -81,7 +83,7 @@ class HealthWorkerController extends Controller
      */
     public function show($id)
     {
-        $healthworker = HealthWorker::firstOrFail($id);
+        $healthworker = HealthWorker::findOrFail($id);
         return new HealthWorkerResource($healthworker);
     }
 

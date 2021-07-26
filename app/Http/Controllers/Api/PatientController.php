@@ -18,9 +18,12 @@ class PatientController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function allPatients(Request $request)
     {
-        //
+        $byGender = $request->payload['genderFilter'] ?? [];
+        $byAge =  $request->payload['ageFilter'] ?? [];
+        $patients = Patient::withFilters($byGender, $byAge)->get();
+        return PatientResource::collection($patients);
     }
 
     /**
@@ -41,6 +44,23 @@ class PatientController extends Controller
             'remember_token'=> Str::random(10),
         ]);
 
+        // Handle File Upload
+        if ($request->hasFile('image')) {
+            // Get filename with the extension
+            $filenameWithExt = $request->file('image')->getClientOriginalName();
+            // Get just filename
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            // Get just ext
+            $extension = $request->file('image')->getClientOriginalExtension();
+            // Filename to store
+            $fileNameToStore = $filename . '_' . time() . '.' . $extension;
+            // Upload Image
+            $path = $request->file('image')->storeAs('public/patients', $fileNameToStore);
+            $path = str_replace('public', '', $path);
+        } else {
+            $path = 'patients/noimage.png';
+        }
+
         // Add User as Patient
         $patient = Patient::create([
             'user_id'       => $user->id,
@@ -54,10 +74,8 @@ class PatientController extends Controller
             'ward'          => $request->ward,
             'lga'           => $request->lga,
             'state'         => $request->state,
+            'image'         => asset('storage'.$path),
         ]);
-
-        // Upload Patient Image and attach relationship in the database
-        $patient->attachImage($request->image);
         return new PatientResource($patient);
     }
 
