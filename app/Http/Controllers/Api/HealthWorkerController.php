@@ -82,7 +82,7 @@ class HealthWorkerController extends Controller
      */
     public function show($id)
     {
-        $healthworker = HealthWorker::with('patientsEncounter')->findOrFail($id);
+        $healthworker = HealthWorker::with('patientsEncounter')->firstWhere('user_id', $id);
         return new HealthWorkerResource($healthworker);
     }
 

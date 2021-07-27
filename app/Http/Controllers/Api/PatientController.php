@@ -39,6 +39,7 @@ class PatientController extends Controller
         $user = User::create([
             'name'          => $request->name,
             'email'         => $request->email,
+            'is_health_worker'  => false,
             'password'      => Hash::make($request->password),
             'email_verified_at' => now(),
             'remember_token'=> Str::random(10),
