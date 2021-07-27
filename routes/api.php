@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\MeController;
 use App\Http\Controllers\Api\TokenController;
 use App\Http\Controllers\Api\Chat\ChatController;
+use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\HealthWorkerController;
 use App\Http\Controllers\Api\PatientController;
 use App\Http\Controllers\Api\PatientEncounterController;
@@ -24,6 +25,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Endpoints for Healworkers Access
     Route::group(['middleware' => ['healthworker']], function () {
         Route::apiResource('healthworker', HealthWorkerController::class);
+        Route::get('analytics', DashboardController::class);
     });
 
     // Endpoints for patients

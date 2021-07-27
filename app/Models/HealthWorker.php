@@ -41,4 +41,11 @@ class HealthWorker extends Model implements HasMedia
     {
         return $this->addMediaFromRequest($file)->toMediaCollection('healthworker_images');
     }
+
+
+    // RELATIONSHIPS
+    public function patientsEncounter()
+    {
+        return $this->hasMany(PatientEncounter::class, 'healthworker');
+    }
 }

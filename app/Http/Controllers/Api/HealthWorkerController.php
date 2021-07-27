@@ -7,7 +7,6 @@ use Illuminate\Support\Str;
 use App\Models\HealthWorker;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\HealthWorkerRequest;
 use App\Http\Resources\HealthWorkerResource;
@@ -83,7 +82,7 @@ class HealthWorkerController extends Controller
      */
     public function show($id)
     {
-        $healthworker = HealthWorker::findOrFail($id);
+        $healthworker = HealthWorker::with('patientsEncounter')->findOrFail($id);
         return new HealthWorkerResource($healthworker);
     }
 
